@@ -2,6 +2,7 @@ package com.db.cib.nace.service;
 
 import com.db.cib.nace.dto.NaceDataDto;
 import com.db.cib.nace.entity.NaceDataEntity;
+import com.db.cib.nace.exception.InvalidInputException;
 import com.db.cib.nace.repository.NaceDataRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ public class TestNaceDataService {
     }
 
     @Test
-    public void testGetNaceDataByOrderId() {
+    public void testGetNaceDataByOrderId() throws InvalidInputException {
 
         //Test Data
         NaceDataEntity naceDataOne = data.get(0);

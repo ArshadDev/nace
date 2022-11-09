@@ -36,7 +36,10 @@ public class NaceDataService {
         return naceDataRepository.saveAll(naceData);
     }
 
-    public NaceDataEntity getNaceDataByOrderId(String orderId) {
+    public NaceDataEntity getNaceDataByOrderId(String orderId) throws InvalidInputException {
+        if (StringUtils.isBlank(orderId)) {
+            throw new InvalidInputException("Please provide valid orderId");
+        }
         log.info(" Searching for NaceData by OrderId : " + orderId);
         Optional<NaceDataEntity> existingRecord = naceDataRepository.findByOrder(orderId);
         return existingRecord.orElseThrow(() -> new NaceDataNotFoundException("NACE data not found for OrderId " + orderId));

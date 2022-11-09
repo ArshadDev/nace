@@ -1,7 +1,10 @@
 package com.db.cib.nace.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,10 +12,9 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Entity
 @Table(name = "nace_data")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NaceDataEntity {

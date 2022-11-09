@@ -6,7 +6,6 @@ import com.db.cib.nace.exception.InvalidInputException;
 import com.db.cib.nace.service.CsvFileReaderService;
 import com.db.cib.nace.service.FileReaderService;
 import com.db.cib.nace.service.NaceDataService;
-import com.db.cib.nace.utils.UtilService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,14 +42,12 @@ public class TestNaceDataController {
     MockMvc mockMvc;
     private MockMultipartFile mockMultipartFile;
 
-    @Autowired
-    private UtilService utilservice;
 
     @BeforeEach
     public void setUp() throws Exception {
-        utilservice = new UtilService();
+
         FileReaderService<NaceDataDto> service = new CsvFileReaderService<>();
-        ReflectionTestUtils.setField(utilservice, "service", service);
+        ReflectionTestUtils.setField(naceDataService, "service", service);
         InputStream is = getClass().getClassLoader().getResourceAsStream("NACE_REV2_Data_Test_File.csv");
         mockMultipartFile = new MockMultipartFile("file", "NACE_REV2_Data_Test_File.csv", "application/vnd.ms-excel", is);
     }
@@ -90,7 +87,7 @@ public class TestNaceDataController {
     @Test
     public void testGetNaceDataForOrderId_Failure() throws Exception {
 
-        List<NaceDataEntity> naceData = utilservice.readNaceDataFromCsvFile(mockMultipartFile);
+        List<NaceDataEntity> naceData = naceDataService.readNaceDataFromCsvFile(mockMultipartFile);
         MvcResult apiResult = mockMvc.perform(get("/nace-data/{orderId}", naceData.get(0).getOrder()))
                 .andExpect(status().isNotFound()).andReturn();
 

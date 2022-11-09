@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
-public class CommonExceptionHandler {
+public class CentralisedExceptionHandler {
 
     @ExceptionHandler(NaceDataNotFoundException.class)
     public ResponseEntity<Object> handleNaceDataNotFoundException(NaceDataNotFoundException ex) {

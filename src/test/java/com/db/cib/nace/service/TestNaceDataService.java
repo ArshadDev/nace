@@ -1,5 +1,6 @@
 package com.db.cib.nace.service;
 
+import com.db.cib.nace.dto.NaceDataDto;
 import com.db.cib.nace.entity.NaceDataEntity;
 import com.db.cib.nace.repository.NaceDataRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -7,14 +8,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,29 +31,36 @@ public class TestNaceDataService {
 
     private NaceDataService naceDataService;
     private List<NaceDataEntity> data;
+    private MockMultipartFile mockMultipartFile;
 
 
     @BeforeAll
-    public void setUp() {
+    public void setUp() throws IOException {
         naceDataService = new NaceDataService();
         naceDataRepository = mock(NaceDataRepository.class);
+
+        FileReaderService<NaceDataDto> service = new CsvFileReaderService<>();
+        ReflectionTestUtils.setField(naceDataService, "service", service);
         ReflectionTestUtils.setField(naceDataService, "naceDataRepository", naceDataRepository);
+
+        InputStream is = getClass().getClassLoader().getResourceAsStream("NACE_REV2_Data_Test_File.csv");
+        mockMultipartFile = new MockMultipartFile("file", "NACE_REV2_Data_Test_File.csv", "application/vnd.ms-excel", is);
         populateTestData();
     }
 
 
     @Test
-    public void testSaveNaceData() {
+    public void testSaveNaceData() throws Exception {
 
         //Set behavior
-        when(naceDataRepository.saveAll(data)).thenReturn(data);
+        when(naceDataRepository.saveAll(any())).thenReturn(data);
 
         //Make Actual call
-        List<NaceDataEntity> naceData = naceDataService.saveNaceData(data);
+        List<NaceDataEntity> naceData = naceDataService.saveNaceData(mockMultipartFile);
 
         //Verify result
         assertNotNull(naceData);
-        assertEquals(naceData.size(), 2);
+        assertEquals(2, naceData.size());
     }
 
     @Test
@@ -80,6 +92,13 @@ public class TestNaceDataService {
         //Verify result
         assertNotNull(allNaceData);
         assertEquals(allNaceData.size(), 2);
+    }
+
+    @Test
+    public void testReadNaceDataFromCsvFile() throws Exception {
+        List<NaceDataEntity> naceData = naceDataService.readNaceDataFromCsvFile(mockMultipartFile);
+        assertNotNull(naceData);
+        assertEquals(naceData.size(), 2);
     }
 
 

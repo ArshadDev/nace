@@ -11,29 +11,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DataTransformer {
+public class DataModelMapper {
 
-    public static NaceDataDto convertEntityToDto(NaceDataEntity data) {
+    public static NaceDataDto mapEntityToDto(NaceDataEntity data) {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.convertValue(data, new TypeReference<NaceDataDto>() {
         });
     }
 
-    public static NaceDataEntity convertDtoToEntity(NaceDataDto data) {
+    public static NaceDataEntity mapDtoToEntity(NaceDataDto data) {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.convertValue(data, new TypeReference<NaceDataEntity>() {
         });
     }
 
-    public static List<NaceDataDto> convertEntitiesToDTOs(List<NaceDataEntity> naceData) {
+    public static List<NaceDataDto> mapEntitiesToDTOs(List<NaceDataEntity> naceData) {
         return CollectionUtils.isEmpty(naceData)
                 ? new ArrayList<>()
-                : naceData.parallelStream().map(DataTransformer::convertEntityToDto).collect(Collectors.toList());
+                : naceData.parallelStream().map(DataModelMapper::mapEntityToDto).collect(Collectors.toList());
     }
 
-    public static List<NaceDataEntity> convertDTOsToEntities(List<NaceDataDto> naceData) {
+    public static List<NaceDataEntity> mapDTOsToEntities(List<NaceDataDto> naceData) {
         return CollectionUtils.isEmpty(naceData)
                 ? new ArrayList<>()
-                : naceData.parallelStream().map(DataTransformer::convertDtoToEntity).collect(Collectors.toList());
+                : naceData.parallelStream().map(DataModelMapper::mapDtoToEntity).collect(Collectors.toList());
     }
 }

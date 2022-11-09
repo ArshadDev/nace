@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    password: admin
+    url: jdbc:h2:mem:cibdb;DB_CLOSE_ON_EXIT=FALSE
+    username: admin
+  h2:
+    console:
+      enabled: true
+      path: /db
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+    show-sql: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 2MB

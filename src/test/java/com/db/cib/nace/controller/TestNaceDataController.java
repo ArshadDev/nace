@@ -56,7 +56,8 @@ public class TestNaceDataController {
     @Test
     public void testUploadNaceDataFile_ValidCsvFile_Success() throws Exception {
 
-        MvcResult apiResult = mockMvc.perform(multipart("/api/nace-data-file").file(mockMultipartFile))
+        MvcResult apiResult;
+        apiResult = mockMvc.perform(multipart("/api/nace-data-file").file(mockMultipartFile))
                 .andExpect(status().isOk()).andReturn();
 
         assertNotNull(apiResult.getResponse().getContentAsString());
@@ -74,7 +75,7 @@ public class TestNaceDataController {
                 .andExpect(status().isBadRequest()).andReturn();
 
         assertNotNull(apiResult.getResponse().getContentAsString());
-        assertTrue(apiResult.getResponse().getContentAsString().contains("Please upload a valid CSV file !"));
+        assertTrue(apiResult.getResponse().getContentAsString().contains("Please upload a valid CSV file Invalid_CSV_File.txt"));
 
         Optional<Exception> exceptionOccurred = Optional.ofNullable(apiResult.getResolvedException());
 

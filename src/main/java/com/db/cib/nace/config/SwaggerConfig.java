@@ -16,7 +16,7 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2).select()
+        return new Docket(DocumentationType.OAS_30).select()
                 .apis(RequestHandlerSelectors.basePackage("com.db.cib.nace.controller"))
                 .paths(PathSelectors.any())
                 .build().apiInfo(apiInfo());

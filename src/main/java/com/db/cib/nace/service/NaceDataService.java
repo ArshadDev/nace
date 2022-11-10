@@ -32,7 +32,7 @@ public class NaceDataService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public List<NaceDataEntity> saveNaceData(MultipartFile file) throws Exception {
         List<NaceDataEntity> naceData = readNaceDataFromCsvFile(file);
-        log.info(" Storing {} NACE data records to database ", naceData.size());
+        log.info(" Storing {} NACE Data records to database ", naceData.size());
         return naceDataRepository.saveAll(naceData);
     }
 
@@ -60,13 +60,13 @@ public class NaceDataService {
     public List<NaceDataEntity> readNaceDataFromCsvFile(MultipartFile file) throws Exception {
         try {
             if (Objects.isNull(file) || !StringUtils.endsWithIgnoreCase(file.getOriginalFilename(), ".csv")) {
-                log.error("Please upload a valid CSV file {}", file.getOriginalFilename());
-                throw new InvalidInputException("Please upload a valid CSV file !");
+                log.error("Please upload a valid CSV file {}", (null != file ? file.getOriginalFilename() : ""));
+                throw new InvalidInputException("Please upload a valid CSV file " + (null != file ? file.getOriginalFilename() : ""));
             }
             List<NaceDataDto> naceDataDTOs = service.readFileData(file, NaceDataDto.class);
             return DataModelMapper.mapDTOsToEntities(naceDataDTOs);
         } catch (Exception e) {
-            log.error("Exception occurred while reading data from CSV file and populating to objects ", e);
+            log.error("Exception occurred while reading data from uploaded file", e);
             throw e;
         }
     }
